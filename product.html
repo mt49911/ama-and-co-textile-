@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Variants - AMA & CO TEXTILE</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="logo.jpg" alt="AMA & CO TEXTILE">
+      </div>
+      <div class="notification-bell" id="notification-bell">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge" id="notification-badge">0</span>
+        <div class="notification-dropdown" id="notification-dropdown"></div>
+      </div>
+      <div class="menu-toggle" id="mobile-menu">
+        <span></span><span></span><span></span>
+      </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="order-status.html">Order Status</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <h2 id="product-name-header"></h2>
+    <div class="variant-grid" id="variant-grid"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 AMA & CO TEXTILE LTD. All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="data.js"></script>
+  <script src="main.js"></script>
+  <script>
+    // Get product name from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productName = urlParams.get('name');
+    document.getElementById('product-name-header').textContent = productName;
+
+    // Load variants
+    const products = loadProducts();
+    const variants = products.filter(p => p.name === productName);
+    const container = document.getElementById('variant-grid');
+
+    variants.forEach(variant => {
+      const images = variant.images || [variant.image || 'https://via.placeholder.com/300x300?text=Textile'];
+      // Show first image
+      const card = document.createElement('div');
+      card.className = 'variant-card';
+      card.innerHTML = `
+        <div class="product-image">
+          <img src="${images[0]}" alt="${variant.name}">
+        </div>
+        <div class="product-info">
+          <h3>${variant.name}</h3>
+          <p class="product-price">₦${variant.price}</p>
+          <p>${variant.description || ''}</p>
+          <a href="order.html?product=${encodeURIComponent(variant.name)}" class="btn">Order Now</a>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>
